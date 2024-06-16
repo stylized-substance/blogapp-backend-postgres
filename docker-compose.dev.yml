@@ -1,0 +1,15 @@
+services:
+  app:
+    image: blogapp-backend-postgres
+    build:
+      context: .
+      dockerfile: dev.dockerfile
+    volumes:
+      - ./:/usr/src/app
+  postges:
+    attach: false
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=dbpassword
