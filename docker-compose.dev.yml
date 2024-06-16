@@ -6,7 +6,7 @@ services:
       dockerfile: dev.dockerfile
     volumes:
       - ./:/usr/src/app
-  postges:
+  postgres:
     attach: false
     image: postgres
     volumes:
@@ -16,3 +16,6 @@ services:
     environment:
       - POSTGRES_PASSWORD=dbpassword
       - PGDATA=/var/lib/postgresql/data/pgdata
+  debug-helper:
+    image: busybox
+    
