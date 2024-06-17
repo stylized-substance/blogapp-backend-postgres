@@ -1,5 +1,4 @@
 const router = require('express').Router()
-const errorHandler = require('../utils/errorHandler')
 
 const { Blog } = require('../models')
 
