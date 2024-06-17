@@ -1,4 +1,5 @@
 const router = require('express').Router()
+const errorHandler = require('../utils/errorHandler')
 
 const { Blog } = require('../models')
 
@@ -24,13 +25,9 @@ router.get('/:id', blogFinder, async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-  try {
-    console.log(req.body)
-    const blog = Blog.create(req.body)
-    res.json(blog)
-  } catch (error) {
-    return res.status(400).json({ error })
-  }
+  console.log(req.body)
+  const blog = await Blog.create(req.body)
+  res.json(blog)
 })
 
 router.put('/:id', blogFinder, async (req, res) => {
@@ -38,7 +35,6 @@ router.put('/:id', blogFinder, async (req, res) => {
     req.blog.likes = (req.body.likes)
     await req.blog.save()
     res.json({ likes: req.blog.likes })
-    // res.json(req.blog.likes)
   } else {
     res.status(404).end()
   }
@@ -46,12 +42,8 @@ router.put('/:id', blogFinder, async (req, res) => {
 
 router.delete('/:id', blogFinder, async (req, res) => {
   if (req.blog) {
-    try {
-      await req.blog.destroy()
-      res.status(200).end()
-    } catch (error) {
-      return res.status(400).json({ error })
-    }
+    await req.blog.destroy()
+    res.status(200).end()
   } else {
     res.status(404).end()
   }
