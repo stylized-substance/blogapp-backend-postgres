@@ -1,12 +1,16 @@
 services:
   app:
-    image: blogapp-backend-postgres
+    container_name: blogapp-backend-app
+    image: blogapp-backend-app
     build:
       context: .
-      dockerfile: dev.dockerfile
+      dockerfile: dev.Dockerfile
+    ports:
+      - 3001:3001
     volumes:
       - ./:/usr/src/app
   postgres:
+    container_name: blogapp-backend-postgres
     attach: false
     image: postgres
     volumes:
@@ -16,6 +20,7 @@ services:
     environment:
       - POSTGRES_PASSWORD=dbpassword
       - PGDATA=/var/lib/postgresql/data/pgdata
-  debug-helper:
+  busybox:
+    container_name: blogapp-backend-busybox
     image: busybox
     
