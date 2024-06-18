@@ -1,14 +1,18 @@
 const router = require("express").Router();
 
-const { User } = require("../models");
+const { Blog, User } = require('../models')
 
 router.get("/", async (req, res) => {
-  const users = await User.findAll();
+  const users = await User.findAll({
+    include: {
+      model: Blog
+    }
+  });
   res.json(users);
 });
 
-// Test if error handling works automatically
 router.post("/", async (req, res) => {
+  console.log(req.body)
   const user = await User.create(req.body);
   res.json(user);
 });

@@ -10,6 +10,10 @@ const errorHandler = (error, request, response, next) => {
     return response.status(400).send({ SequelizeDatabaseError: error })
   }
 
+  if (error.name === 'SequelizeUniqueConstraintError') {
+    return response.status(400).send({ SequelizeUniqueConstraintError: error })
+  }
+
   next(error)
 }
 
