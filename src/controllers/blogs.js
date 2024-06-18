@@ -4,7 +4,7 @@ const { Blog, User } = require("../models");
 
 const tokenExtractor = require("../utils/tokenExtractor");
 
-const { Op } = require('sequelize')
+const { Op } = require("sequelize");
 
 const blogFinder = async (req, res, next) => {
   req.blog = await Blog.findByPk(req.params.id, {
@@ -18,21 +18,24 @@ const blogFinder = async (req, res, next) => {
 };
 
 router.get("/", async (req, res) => {
-  const where = {}
+  let where = {};
 
   if (req.query.search) {
-    where.title = {
-      [Op.iLike]: `%${req.query.search}%`
-    }
+    where = {
+      [Op.or]: [
+        { title: { [Op.iLike]: `%${req.query.search}%` } },
+        { author: { [Op.iLike]: `%${req.query.search}%` } },
+      ],
+    };
   }
-  
+
   const blogs = await Blog.findAll({
     attributes: { exclude: ["userId"] },
     include: {
       model: User,
       attributes: ["username"],
     },
-    where
+    where,
   });
   console.log(JSON.stringify(blogs, null, 2));
   res.json(blogs);
@@ -70,10 +73,12 @@ router.put("/:id", blogFinder, async (req, res) => {
 router.delete("/:id", blogFinder, tokenExtractor, async (req, res) => {
   if (req.blog) {
     if (req.blog.toJSON().user.username === req.decodedToken.username) {
-      await req.blog.destroy()
+      await req.blog.destroy();
       res.status(200).end();
     } else {
-      res.status(401).json({ error: 'Blogs can only be deleted by their creator' })
+      res
+        .status(401)
+        .json({ error: "Blogs can only be deleted by their creator" });
     }
   } else {
     res.status(404).end();
