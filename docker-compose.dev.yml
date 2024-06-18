@@ -9,6 +9,7 @@ services:
       - 3001:3001
     volumes:
       - ./:/usr/src/app
+      - ./node_modules:/usr/app/node_modules/
   postgres:
     container_name: blogapp-backend-postgres
     attach: false
