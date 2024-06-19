@@ -1,6 +1,8 @@
 const Sequelize = require('sequelize')
 const { DATABASE_URL } = require('./config')
 const { Umzug, SequelizeStorage } = require('umzug')
+const { Blog, User } = require('../models')
+const { blogs, users } = require('../data/dummydata')
 
 const sequelize = new Sequelize(DATABASE_URL)
 
@@ -25,6 +27,10 @@ const connectToDatabase = async () => {
     await sequelize.authenticate()
     await runMigrations()
     console.log('connected to the database')
+
+    // Initialize db with some data
+    //Blog.bulkCreate(blogs)
+    //User.bulkCreate(users)
   // eslint-disable-next-line no-unused-vars
   } catch (err) {
     console.log('failed to connect to the database, error:', err)
