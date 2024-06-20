@@ -10,6 +10,8 @@ services:
     volumes:
       - ./:/usr/src/app
       - ./node_modules:/usr/app/node_modules/
+    environment:
+      - INDOCKER=true
   postgres:
     container_name: blogapp-backend-postgres
     attach: false
