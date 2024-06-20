@@ -3,7 +3,20 @@ const { DATABASE_URL } = require('./config')
 const { Umzug, SequelizeStorage } = require('umzug')
 
 const sequelize = new Sequelize(DATABASE_URL)
-console.log(DATABASE_URL)
+
+const connectToDatabase = async () => {
+  try {
+    await sequelize.authenticate()
+    await runMigrations()
+    console.log('connected to the database')
+  } catch (err) {
+    console.log('failed to connect to the database, error:', err)
+    // eslint-disable-next-line no-undef
+    return process.exit(1)
+  }
+
+  return null
+}
 
 const migrationConf = {
   migrations: {
@@ -25,21 +38,7 @@ const runMigrations = async () => {
 const rollBackMigration = async () => {
   await sequelize.authenticate()
   const migrator = new Umzug(migrationConf)
-  await migrator.down
-}
-
-const connectToDatabase = async () => {
-  try {
-    await sequelize.authenticate()
-    await runMigrations()
-    console.log('connected to the database')
-  } catch (err) {
-    console.log('failed to connect to the database, error:', err)
-    // eslint-disable-next-line no-undef
-    return process.exit(1)
-  }
-
-  return null
+  await migrator.down()
 }
 
 module.exports = { connectToDatabase, sequelize, rollBackMigration, runMigrations }

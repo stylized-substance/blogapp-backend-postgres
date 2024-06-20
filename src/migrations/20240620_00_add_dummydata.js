@@ -10,7 +10,7 @@ module.exports = {
     await queryInterface.bulkInsert("blogs", blogs);
   },
   down: async ({ context: queryInterface }) => {
-    queryInterface.bulkDelete("users", { username: { [Op.in]: [usernames] } })
-    queryInterface.bulkDelete("blogs", { author: { [Op.in]: [blogsAuthors] } })
+    queryInterface.bulkDelete("blogs", { author: { [Op.in]: blogsAuthors } })
+    queryInterface.bulkDelete("users", { username: { [Op.in]: usernames } })
   }
 };
