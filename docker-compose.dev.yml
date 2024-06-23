@@ -8,8 +8,7 @@ services:
     ports:
       - 3001:3001
     volumes:
-      - ./:/usr/src/app
-      - ./node_modules:/usr/app/node_modules/
+      - ./src:/usr/src/app/src
     environment:
       - INDOCKER=true
   postgres:
