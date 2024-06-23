@@ -13,16 +13,31 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   const user = await User.findByPk(req.params.id, {
-    include: {
+    include: [{
       model: Blog,
       as: 'readinglist_items',
       attributes: {
+        // include: ['blogReadStatus'],
         exclude: ['userId', 'createdAt', 'updatedAt']
       },
       through: {
-        attributes: []
+        attributes: ['blogReadStatus']
+      },
+      // through: {
+      //   attributes: []
+      // },
+      include: {
+        model: User,
+        as: 'readinglist_adders',
+        // attributes: ['name'],
+        through: {
+          attributes: ['id'],
+          through: {
+            attributes: []
+          }
+        }
       }
-    }
+    }]
   })
   res.json(user)
 })
