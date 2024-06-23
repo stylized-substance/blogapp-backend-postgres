@@ -1,6 +1,6 @@
 const router = require("express").Router();
 
-const { Blog, User } = require('../models')
+const { Blog, User, ReadingListItem } = require('../models')
 
 router.get("/", async (req, res) => {
   const users = await User.findAll({
@@ -10,6 +10,15 @@ router.get("/", async (req, res) => {
   });
   res.json(users);
 });
+
+router.get("/:id", async (req, res) => {
+  const user = await User.findByPk(req.params.id, {
+    include:{
+      model: ReadingListItem,
+    }
+  })
+  res.json(user)
+})
 
 router.post("/", async (req, res) => {
   console.log(req.body)

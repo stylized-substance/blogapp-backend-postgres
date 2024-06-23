@@ -18,12 +18,17 @@ ReadingListItem.init({
     type: DataTypes.INTEGER,
     allowNull: false,
     references: { model: 'blogs', key: 'id' }
+  },
+  blogReadStatus: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+    defaultValue: 'unread'
   }
 }, {
   sequelize,
   underscored: true,
   timestamps: false,
-  modelName: 'user_readinglists'
+  modelName: 'user_readinglist'
 })
 
 module.exports = ReadingListItem
