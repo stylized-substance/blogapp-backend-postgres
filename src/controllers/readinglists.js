@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const { ReadingListItem } = require('../models')
 const tokenExtractor = require("../utils/tokenExtractor");
+const sessionFinder = require("../utils/sessionFinder")
 
 router.get('/', async (req, res) => {
   const readingLists = await ReadingListItem.findAll()
@@ -13,7 +14,12 @@ router.post('/', async (req, res) => {
   res.json(addedItem)
 })
 
-router.put('/:id', tokenExtractor, async (req, res) => {
+router.put('/:id', tokenExtractor, sessionFinder, async (req, res) => {
+  if (!req.session_valid || req.session_valid === false) {
+    res.status(401).json(`You don't have a valid login session`)
+    return
+  }
+  
   const readinglistItem = await ReadingListItem.findByPk(req.params.id)
 
   if (!readinglistItem) {

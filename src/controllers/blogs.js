@@ -4,6 +4,8 @@ const { Blog, User } = require("../models");
 
 const tokenExtractor = require("../utils/tokenExtractor");
 
+const sessionFinder = require("../utils/sessionFinder")
+
 const { Op } = require("sequelize");
 
 const blogFinder = async (req, res, next) => {
@@ -53,8 +55,14 @@ router.get("/:id", blogFinder, async (req, res) => {
   }
 });
 
-router.post("/", tokenExtractor, async (req, res) => {
+router.post("/", tokenExtractor, sessionFinder, async (req, res) => {
   const user = await User.findByPk(req.decodedToken.id);
+
+  if (!req.session_valid || req.session_valid === false) {
+    res.status(401).json(`You don't have a valid login session`)
+    return
+  }
+  
   const blog = await Blog.create({
     ...req.body,
     userId: user.id,
@@ -73,7 +81,12 @@ router.put("/:id", blogFinder, async (req, res) => {
   }
 });
 
-router.delete("/:id", blogFinder, tokenExtractor, async (req, res) => {
+router.delete("/:id", blogFinder, tokenExtractor, sessionFinder, async (req, res) => {
+  if (!req.session_valid || req.session_valid === false) {
+    res.status(401).json(`You don't have a valid login session`)
+    return
+  }
+  
   if (req.blog) {
     if (req.blog.toJSON().user.username === req.decodedToken.username) {
       await req.blog.destroy();
