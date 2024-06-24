@@ -36,7 +36,7 @@ router.put('/:id', tokenExtractor, async (req, res) => {
     return
   }
 
-  readinglistItem.blogReadStatus = req.body.read
+  readinglistItem.blogReadStatus = 'read'
   await readinglistItem.save()
   res.json(readinglistItem)
 })
