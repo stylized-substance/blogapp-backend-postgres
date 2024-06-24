@@ -1,6 +1,6 @@
 const router = require("express").Router();
 
-const { Blog, User, ReadingListItem } = require('../models')
+const { Blog, User } = require('../models')
 
 router.get("/", async (req, res) => {
   const users = await User.findAll({
