@@ -17,26 +17,11 @@ router.get("/:id", async (req, res) => {
       model: Blog,
       as: 'readinglist_items',
       attributes: {
-        // include: ['blogReadStatus'],
         exclude: ['userId', 'createdAt', 'updatedAt']
       },
       through: {
-        attributes: ['blogReadStatus']
+        attributes: ['blogReadStatus', 'id']
       },
-      // through: {
-      //   attributes: []
-      // },
-      include: {
-        model: User,
-        as: 'readinglist_adders',
-        // attributes: ['name'],
-        through: {
-          attributes: ['id'],
-          through: {
-            attributes: []
-          }
-        }
-      }
     }]
   })
   res.json(user)
