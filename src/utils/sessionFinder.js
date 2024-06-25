@@ -8,12 +8,11 @@ const sessionFinder = async (req, res, next) => {
     }
   })
   
-  if (session && session.session_valid === true) {
-    req.session_valid = true
-  } else {
-    req.session_valid = false
+  if (!session || session.session_valid === false) {
+    res.status(401).json(`You don't have a valid login session`)
+    return
   }
-
+  
   next()
 }
 

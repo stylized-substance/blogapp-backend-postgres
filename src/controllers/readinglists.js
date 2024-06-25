@@ -15,11 +15,6 @@ router.post('/', async (req, res) => {
 })
 
 router.put('/:id', tokenExtractor, sessionFinder, async (req, res) => {
-  if (!req.session_valid || req.session_valid === false) {
-    res.status(401).json(`You don't have a valid login session`)
-    return
-  }
-  
   const readinglistItem = await ReadingListItem.findByPk(req.params.id)
 
   if (!readinglistItem) {
