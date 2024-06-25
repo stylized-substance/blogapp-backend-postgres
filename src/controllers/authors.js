@@ -4,7 +4,6 @@ const sequelize = require('sequelize')
 
 router.get('/', async (req, res) => {
   const authors = await Blog.findAll({
-    //TODO: fix query
     attributes: [
       'author',
       [sequelize.fn('COUNT', sequelize.col('author')), 'blog_count'],

@@ -13,13 +13,14 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   let where = {}
+  console.log(req.query === true)
 
   if (req.query.read === 'true') {
-    where = {blogReadStatus: 'read'}
+    where = {blogReadStatus: true}
   }
   
   if (req.query.read === 'false') {
-    where = {blogReadStatus: 'unread'}
+    where = {blogReadStatus: false}
   }
   
   const user = await User.findByPk(req.params.id, {
@@ -39,7 +40,6 @@ router.get("/:id", async (req, res) => {
 })
 
 router.post("/", async (req, res) => {
-  console.log(req.body)
   const user = await User.create(req.body);
   res.json(user);
 });

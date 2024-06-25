@@ -19,9 +19,9 @@ module.exports = {
         references: { model: 'blogs', key: 'id' }
       },
       blog_read_status: {
-        type: DataTypes.TEXT,
+        type: DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: 'unread'
+        defaultValue: false
       }
     })
   },

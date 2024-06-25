@@ -32,17 +32,17 @@ router.put('/:id', tokenExtractor, sessionFinder, async (req, res) => {
     return
   }
 
-  if (!req.body.read) {
+  if (typeof req.body.read === "undefined") {
     res.status(400).json('error: Missing read property from request body')
     return
   }
   
-  if (!(req.body.read === true)) {
-    res.status(400).json('error: Request body read property can only be true')
+  if (req.body.read !== true && req.body.read !== false) {
+    res.status(400).json('error: Request body read property can only be true or false')
     return
   }
 
-  readinglistItem.blogReadStatus = 'read'
+  readinglistItem.blogReadStatus = req.body.read
   await readinglistItem.save()
   res.json(readinglistItem)
 })

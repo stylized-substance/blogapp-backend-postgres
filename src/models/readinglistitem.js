@@ -20,9 +20,9 @@ ReadingListItem.init({
     references: { model: 'blogs', key: 'id' }
   },
   blogReadStatus: {
-    type: DataTypes.TEXT,
+    type: DataTypes.BOOLEAN,
     allowNull: false,
-    defaultValue: 'unread'
+    defaultValue: false
   }
 }, {
   sequelize,

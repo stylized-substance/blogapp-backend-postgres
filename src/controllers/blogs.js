@@ -42,13 +42,11 @@ router.get("/", async (req, res) => {
       ['likes', 'DESC']
     ]
   });
-  console.log(JSON.stringify(blogs, null, 2));
   res.json(blogs);
 });
 
 router.get("/:id", blogFinder, async (req, res) => {
   if (req.blog) {
-    console.log(req.blog.toJSON());
     res.json(req.blog);
   } else {
     res.status(404).end();
