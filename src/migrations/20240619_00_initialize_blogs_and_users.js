@@ -25,12 +25,12 @@ module.exports = {
       },
       created_at: {
         type: DataTypes.DATE,
-        defaultValue: new Date
+        defaultValue: new Date(),
       },
       updated_at: {
         type: DataTypes.DATE,
-        defaultValue: new Date
-      }
+        defaultValue: new Date(),
+      },
     });
     await queryInterface.createTable("users", {
       id: {
@@ -52,21 +52,21 @@ module.exports = {
       },
       created_at: {
         type: DataTypes.DATE,
-        defaultValue: new Date
+        defaultValue: new Date(),
       },
       updated_at: {
         type: DataTypes.DATE,
-        defaultValue: new Date
-      }
+        defaultValue: new Date(),
+      },
     });
-    await queryInterface.addColumn('blogs', 'user_id', {
+    await queryInterface.addColumn("blogs", "user_id", {
       type: DataTypes.INTEGER,
       allowNull: false,
-      references: { model: 'users', key: 'id' }
-    })
+      references: { model: "users", key: "id" },
+    });
   },
   down: async ({ context: queryInterface }) => {
-    await queryInterface.dropTable('blogs')
-    await queryInterface.dropTable('users')
-  }
+    await queryInterface.dropTable("blogs");
+    await queryInterface.dropTable("users");
+  },
 };

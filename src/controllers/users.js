@@ -1,43 +1,45 @@
 const router = require("express").Router();
 
-const { Blog, User } = require('../models')
+const { Blog, User } = require("../models");
 
 router.get("/", async (req, res) => {
   const users = await User.findAll({
     include: {
-      model: Blog
-    }
+      model: Blog,
+    },
   });
   res.json(users);
 });
 
 router.get("/:id", async (req, res) => {
-  let where = {}
-  console.log(req.query === true)
+  let where = {};
+  console.log(req.query === true);
 
-  if (req.query.read === 'true') {
-    where = {blogReadStatus: true}
+  if (req.query.read === "true") {
+    where = { blogReadStatus: true };
   }
-  
-  if (req.query.read === 'false') {
-    where = {blogReadStatus: false}
+
+  if (req.query.read === "false") {
+    where = { blogReadStatus: false };
   }
-  
+
   const user = await User.findByPk(req.params.id, {
-    include: [{
-      model: Blog,
-      as: 'readinglist_items',
-      attributes: {
-        exclude: ['userId', 'createdAt', 'updatedAt']
+    include: [
+      {
+        model: Blog,
+        as: "readinglist_items",
+        attributes: {
+          exclude: ["userId", "createdAt", "updatedAt"],
+        },
+        through: {
+          attributes: ["blogReadStatus", "id"],
+          where,
+        },
       },
-      through: {
-        attributes: ['blogReadStatus', 'id'],
-        where
-      },
-    }]
-  })
-  res.json(user)
-})
+    ],
+  });
+  res.json(user);
+});
 
 router.post("/", async (req, res) => {
   const user = await User.create(req.body);
@@ -52,12 +54,12 @@ router.put("/:username", async (req, res) => {
   });
 
   if (user) {
-    user.username = req.body.username
+    user.username = req.body.username;
   }
 
-  await user.save()
+  await user.save();
 
-  res.json(user)
+  res.json(user);
 });
 
 module.exports = router;

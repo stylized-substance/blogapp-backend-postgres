@@ -1,3 +1,3 @@
-const { rollBackMigration } = require('./db')
+const { rollBackMigration } = require("./db");
 
-rollBackMigration()
+rollBackMigration();

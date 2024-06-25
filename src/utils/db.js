@@ -1,44 +1,49 @@
-const Sequelize = require('sequelize')
-const { DATABASE_URL } = require('./config')
-const { Umzug, SequelizeStorage } = require('umzug')
+const Sequelize = require("sequelize");
+const { DATABASE_URL } = require("./config");
+const { Umzug, SequelizeStorage } = require("umzug");
 
-const sequelize = new Sequelize(DATABASE_URL)
+const sequelize = new Sequelize(DATABASE_URL);
 
 const connectToDatabase = async () => {
   try {
-    await sequelize.authenticate()
-    await runMigrations()
-    console.log('connected to the database')
+    await sequelize.authenticate();
+    await runMigrations();
+    console.log("connected to the database");
   } catch (err) {
-    console.log('failed to connect to the database, error:', err)
+    console.log("failed to connect to the database, error:", err);
     // eslint-disable-next-line no-undef
-    return process.exit(1)
+    return process.exit(1);
   }
 
-  return null
-}
+  return null;
+};
 
 const migrationConf = {
   migrations: {
-    glob: 'src/migrations/*.js'
+    glob: "src/migrations/*.js",
   },
-  storage: new SequelizeStorage({ sequelize, tableName: 'migrations' }),
+  storage: new SequelizeStorage({ sequelize, tableName: "migrations" }),
   context: sequelize.getQueryInterface(),
-  logger: console
-}
+  logger: console,
+};
 
 const runMigrations = async () => {
-  const migrator = new Umzug(migrationConf)
-  const migrations = await migrator.up()
-  console.log('Migrations up to date', {
-    files: migrations.map((mig) => mig.name)
-  })
-}
+  const migrator = new Umzug(migrationConf);
+  const migrations = await migrator.up();
+  console.log("Migrations up to date", {
+    files: migrations.map((mig) => mig.name),
+  });
+};
 
 const rollBackMigration = async () => {
-  await sequelize.authenticate()
-  const migrator = new Umzug(migrationConf)
-  await migrator.down()
-}
+  await sequelize.authenticate();
+  const migrator = new Umzug(migrationConf);
+  await migrator.down();
+};
 
-module.exports = { connectToDatabase, sequelize, rollBackMigration, runMigrations }
+module.exports = {
+  connectToDatabase,
+  sequelize,
+  rollBackMigration,
+  runMigrations,
+};

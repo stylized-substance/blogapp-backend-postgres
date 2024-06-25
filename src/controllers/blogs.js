@@ -4,7 +4,7 @@ const { Blog, User } = require("../models");
 
 const tokenExtractor = require("../utils/tokenExtractor");
 
-const sessionFinder = require("../utils/sessionFinder")
+const sessionFinder = require("../utils/sessionFinder");
 
 const { Op } = require("sequelize");
 
@@ -38,9 +38,7 @@ router.get("/", async (req, res) => {
       attributes: ["username"],
     },
     where,
-    order: [
-      ['likes', 'DESC']
-    ]
+    order: [["likes", "DESC"]],
   });
   res.json(blogs);
 });
@@ -74,19 +72,25 @@ router.put("/:id", blogFinder, async (req, res) => {
   }
 });
 
-router.delete("/:id", blogFinder, tokenExtractor, sessionFinder, async (req, res) => {
-  if (req.blog) {
-    if (req.blog.toJSON().user.username === req.decodedToken.username) {
-      await req.blog.destroy();
-      res.status(200).end();
+router.delete(
+  "/:id",
+  blogFinder,
+  tokenExtractor,
+  sessionFinder,
+  async (req, res) => {
+    if (req.blog) {
+      if (req.blog.toJSON().user.username === req.decodedToken.username) {
+        await req.blog.destroy();
+        res.status(200).end();
+      } else {
+        res
+          .status(401)
+          .json({ error: "Blogs can only be deleted by their creator" });
+      }
     } else {
-      res
-        .status(401)
-        .json({ error: "Blogs can only be deleted by their creator" });
+      res.status(404).end();
     }
-  } else {
-    res.status(404).end();
-  }
-});
+  },
+);
 
 module.exports = router;

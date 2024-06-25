@@ -12,5 +12,6 @@ module.exports = {
       },
     });
   },
-  down: async ({ context: queryInterface }) => queryInterface.removeColumn('blogs', 'year')
+  down: async ({ context: queryInterface }) =>
+    queryInterface.removeColumn("blogs", "year"),
 };
